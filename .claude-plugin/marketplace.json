@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "gen-z-claude-bro",
-      "description": "Activate with /bro. Three intensity levels: lite, full, ultra.",
+      "description": "Activate with /gen-z-claude-bro:bro. Three intensity levels: lite, full, ultra.",
       "source": "./",
       "category": "productivity"
     }

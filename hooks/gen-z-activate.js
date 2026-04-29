@@ -31,7 +31,7 @@ try {
 }
 
 // Emit skill rules as system context
-// Try ~/.claude/skills/gen-z/SKILL.md (installed location), fall back to sibling skills/ dir
+// Try ~/.claude/skills/bro/SKILL.md (installed location), fall back to sibling skills/ dir
 const candidatePaths = [
   path.join(os.homedir(), '.claude', 'skills', 'gen-z', 'SKILL.md'),
   path.join(__dirname, '..', 'skills', 'gen-z', 'SKILL.md'),

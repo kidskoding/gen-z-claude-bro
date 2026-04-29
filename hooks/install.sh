@@ -7,7 +7,7 @@ HOOKS_DIR="$HOME/.claude/hooks"
 SETTINGS="$HOME/.claude/settings.json"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-SKILLS_DIR="$HOME/.claude/skills/gen-z"
+SKILLS_DIR="$HOME/.claude/skills/bro"
 mkdir -p "$HOOKS_DIR" "$SKILLS_DIR"
 
 # Copy hook files
@@ -19,7 +19,7 @@ chmod +x "$HOOKS_DIR/gen-z-mode-tracker.js"
 chmod +x "$HOOKS_DIR/gen-z-statusline.sh"
 
 # Copy skill file so the hook can find it after installation
-cp "$SCRIPT_DIR/../skills/gen-z/SKILL.md" "$SKILLS_DIR/"
+cp "$SCRIPT_DIR/../skills/bro/SKILL.md" "$SKILLS_DIR/"
 
 echo "✓ gen-z hooks installed to $HOOKS_DIR"
 echo "✓ gen-z skill installed to $SKILLS_DIR"

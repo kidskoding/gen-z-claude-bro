@@ -4,7 +4,7 @@
 set -euo pipefail
 
 HOOKS_DIR="$HOME/.claude/hooks"
-SKILLS_DIR="$HOME/.claude/skills/gen-z"
+SKILLS_DIR="$HOME/.claude/skills/bro"
 FLAG="$HOME/.claude/.gen-z-active"
 
 for f in gen-z-activate.js gen-z-mode-tracker.js gen-z-statusline.sh; do

@@ -10,7 +10,7 @@ A Claude Code skill plugin that makes Claude respond like a Gen Z person — sla
 
 | File | What it controls |
 |------|-----------------|
-| `skills/gen-z/SKILL.md` | **Single source of truth** for all behavior: vocab map, intensity levels, auto-clarity rules, emoji guide. Edit only this file for behavior changes. |
+| `skills/bro/SKILL.md` | **Single source of truth** for all behavior: vocab map, intensity levels, auto-clarity rules, emoji guide. Edit only this file for behavior changes. |
 | `hooks/gen-z-activate.js` | SessionStart hook — writes `~/.claude/.gen-z-active` flag, injects SKILL.md body as system context, nudges statusline setup if missing. |
 | `hooks/gen-z-mode-tracker.js` | UserPromptSubmit hook — detects `/bro [lite|full|ultra]` and "stop gen z"/"normal mode", updates or deletes flag file. |
 | `hooks/gen-z-statusline.sh` | Reads flag file, emits `[GEN-Z]` or `[GEN-Z:ULTRA]` badge for Claude Code statusline. |
@@ -33,7 +33,7 @@ Hooks must **silent-fail on all filesystem errors** — a crash here blocks sess
 
 ## Intensity levels
 
-Three levels defined in `skills/gen-z/SKILL.md`: `lite` (light slang, no emoji), `full` (default — full Gen Z, 1-2 emoji), `ultra` (maximum chaos). Persists until changed or session ends.
+Three levels defined in `skills/bro/SKILL.md`: `lite` (light slang, no emoji), `full` (default — full Gen Z, 1-2 emoji), `ultra` (maximum chaos). Persists until changed or session ends.
 
 ## Slash command
 
