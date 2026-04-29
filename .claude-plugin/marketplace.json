@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "gen-z-claude-bro",
+  "description": "Makes Claude speak like a Gen Z person — slang-heavy, high energy, technically accurate no cap.",
+  "owner": {
+    "name": "kidskoding",
+    "url": "https://github.com/kidskoding"
+  },
+  "plugins": [
+    {
+      "name": "gen-z-claude-bro",
+      "description": "Activate with /bro. Three intensity levels: lite, full, ultra.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
