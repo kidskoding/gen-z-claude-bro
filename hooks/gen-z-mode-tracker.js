@@ -13,6 +13,11 @@ const MODE_MAP = {
   '/bro lite': 'lite',
   '/bro full': 'full',
   '/bro ultra': 'ultra',
+  // namespaced form when installed as plugin
+  '/gen-z-claude-bro:bro': 'full',
+  '/gen-z-claude-bro:bro lite': 'lite',
+  '/gen-z-claude-bro:bro full': 'full',
+  '/gen-z-claude-bro:bro ultra': 'ultra',
 };
 
 const STOP_PHRASES = ['stop gen z', 'normal mode'];

@@ -67,54 +67,22 @@ Makes Claude speak like a Gen Z person — slang-heavy, high energy, still techn
 
 ### Claude Code — plugin (recommended)
 
+In Claude Code, run:
+
 ```
 /marketplace add kidskoding/gen-z-claude-bro
 /plugin install gen-z-claude-bro@gen-z-claude-bro
 ```
 
-Restart Claude Code. Activate with `/gen-z-claude-bro:bro`.
+Restart Claude Code. Then:
 
----
+| What you type | What happens |
+|---|---|
+| `/gen-z-claude-bro:bro` | Activate full Gen Z mode |
+| `/gen-z-claude-bro:bro lite` | Light slang, no emoji |
+| `/gen-z-claude-bro:bro ultra` | Maximum chaos |
+| "stop gen z" / "normal mode" | Deactivate |
 
-### Claude Code — manual (hooks + statusline)
-
-```bash
-bash hooks/install.sh
-```
-
-Then add to `~/.claude/settings.json`:
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {"command": "node ~/.claude/hooks/gen-z-activate.js"}
-    ],
-    "UserPromptSubmit": [
-      {"command": "node ~/.claude/hooks/gen-z-mode-tracker.js"}
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/hooks/gen-z-statusline.sh"
-  }
-}
-```
-
-Restart Claude Code. Use `/gen-z-claude-bro:bro`, `/gen-z-claude-bro:bro lite`, or `/gen-z-claude-bro:bro ultra` to switch modes. Turn off with "stop gen z" or "normal mode".
-
-**Statusline badge:**
-```
-[GEN-Z]        ← full mode
-[GEN-Z:LITE]   ← lite mode
-[GEN-Z:ULTRA]  ← ultra mode
-```
-
-**Uninstall:**
-```bash
-bash hooks/uninstall.sh
-```
-Then remove the `hooks` and `statusLine` entries from `~/.claude/settings.json`.
 
 ---
 
