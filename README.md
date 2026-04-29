@@ -1,4 +1,4 @@
-# bro
+# gen z claude bro
 
 **your AI coding assistant but make it gen z**
 
@@ -37,7 +37,7 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill plugin tha
 
 ### 🔥 Gen Z Claude
 
-> "bestie your auth middleware did NOT understand the assignment 💀 token expiry check is using `<` not `<=` — that's the ick. fix:"
+> "bro your auth middleware did NOT understand the assignment 💀 token expiry check is using `<` not `<=` — that's the ick. fix:"
 
 </td>
 </tr>
@@ -57,9 +57,9 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill plugin tha
 
 **lite:** "Connection pooling reuses open connections ngl instead of spinning up new ones per request. Lowkey skips the whole handshake overhead."
 
-**full:** "ok so connection pooling is literally just reusing open DB connections fr fr — no new connection per request bestie. skips the handshake overhead. it's giving performance main character energy no cap."
+**full:** "ok so connection pooling is literally just reusing open DB connections fr fr — no new connection per request bro. skips the handshake overhead. it's giving performance main character energy no cap."
 
-**ultra:** "POOL = reuse open connections NO CAP 💀. new connection per req? that's the ick. skip handshake → fast af periodt. pool understood the assignment bestie. ✨"
+**ultra:** "POOL = reuse open connections NO CAP 💀. new connection per req? that's the ick. skip handshake → fast af periodt. pool understood the assignment bro. ✨"
 
 ---
 
@@ -88,7 +88,7 @@ Then add to `~/.claude/settings.json`:
 }
 ```
 
-Restart Claude Code. that's it bestie.
+Restart Claude Code. that's it bro.
 
 ---
 

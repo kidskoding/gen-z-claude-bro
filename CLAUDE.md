@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Claude Code skill plugin that makes Claude respond like a Gen Z person — slang-heavy, high energy, still technically accurate. Activated via `/bro` or natural-language triggers like "talk like a student" / "bestie mode" / "speak casual".
+A Claude Code skill plugin that makes Claude respond like a Gen Z person — slang-heavy, high energy, still technically accurate. Activated via `/bro` or natural-language triggers like "talk like a student" / "bro mode" / "speak casual".
 
 ## File structure
 
