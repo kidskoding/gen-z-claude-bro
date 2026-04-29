@@ -65,7 +65,18 @@ Makes Claude speak like a Gen Z person — slang-heavy, high energy, still techn
 
 ## Install
 
-### Claude Code (full install — hooks + statusline + `/bro` command)
+### Claude Code — plugin (recommended)
+
+```
+/marketplace add kidskoding/gen-z-claude-bro
+/plugin install gen-z-claude-bro@gen-z-claude-bro
+```
+
+Restart Claude Code. Activate with `/gen-z-claude-bro:bro`.
+
+---
+
+### Claude Code — manual (hooks + statusline)
 
 ```bash
 bash hooks/install.sh
@@ -90,7 +101,7 @@ Then add to `~/.claude/settings.json`:
 }
 ```
 
-Restart Claude Code. Use `/bro`, `/bro lite`, or `/bro ultra` to switch modes. Turn off with "stop gen z" or "normal mode".
+Restart Claude Code. Use `/gen-z-claude-bro:bro`, `/gen-z-claude-bro:bro lite`, or `/gen-z-claude-bro:bro ultra` to switch modes. Turn off with "stop gen z" or "normal mode".
 
 **Statusline badge:**
 ```
@@ -141,7 +152,7 @@ Add the contents of `rules/gen-z-activate.md` to `.clinerules/gen-z.md`.
 
 ### One-time session (any agent)
 
-Paste the contents of `skills/gen-z/SKILL.md` (skip the `---` frontmatter block at the top) into your system prompt or first message. No install needed — works for a single session.
+Paste the contents of `skills/bro/SKILL.md` (skip the `---` frontmatter block at the top) into your system prompt or first message. No install needed — works for a single session.
 
 ---
 
