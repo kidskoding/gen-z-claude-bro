@@ -2,7 +2,7 @@
 
 **your AI coding assistant but make it gen z**
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill plugin that makes Claude speak like a Gen Z person — slang-heavy, high energy, still technically accurate no cap.
+Makes Claude speak like a Gen Z person — slang-heavy, high energy, still technically accurate no cap. Works with Claude Code, Cursor, Copilot, Windsurf, Cline, and any agent that supports system prompts.
 
 ---
 
@@ -49,9 +49,9 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill plugin tha
 
 | Level | Vibe |
 |-------|------|
-| `/bro lite` | Light slang sprinkle. One or two "ngl"s. No emoji. Still readable in a professional context. |
-| `/bro` (default) | Full Gen Z energy. Slang flows naturally. 1-2 emoji per response. fr fr. |
-| `/bro ultra` | MAXIMUM CHAOS. Heavy emoji. Every sentence is a moment. |
+| lite | Light slang sprinkle. One or two "ngl"s. No emoji. Still readable in a professional context. |
+| full (default) | Full Gen Z energy. Slang flows naturally. 1-2 emoji per response. fr fr. |
+| ultra | MAXIMUM CHAOS. Heavy emoji. Every sentence is a moment. |
 
 ### Example — "Explain connection pooling"
 
@@ -64,6 +64,8 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill plugin tha
 ---
 
 ## Install
+
+### Claude Code (full install — hooks + statusline + `/bro` command)
 
 ```bash
 bash hooks/install.sh
@@ -88,41 +90,63 @@ Then add to `~/.claude/settings.json`:
 }
 ```
 
-Restart Claude Code. that's it bro.
+Restart Claude Code. Use `/bro`, `/bro lite`, or `/bro ultra` to switch modes. Turn off with "stop gen z" or "normal mode".
 
----
-
-## Usage
-
-| What you say | What happens |
-|---|---|
-| `/bro` | Activates full Gen Z mode |
-| `/bro lite` | Light slang, no emoji |
-| `/bro ultra` | Maximum chaos |
-| "talk like a student" | Auto-activates |
-| "bro mode" / "speak casual" / "use slang" | Auto-activates |
-| "stop gen z" / "normal mode" | Deactivates |
-
-Mode persists for the entire session until you turn it off.
-
----
-
-## Statusline badge
-
-When installed, your Claude Code statusline shows the active mode:
-
+**Statusline badge:**
 ```
 [GEN-Z]        ← full mode
-[GEN-Z:LITE]   ← lite mode  
+[GEN-Z:LITE]   ← lite mode
 [GEN-Z:ULTRA]  ← ultra mode
 ```
 
----
-
-## Uninstall
-
+**Uninstall:**
 ```bash
 bash hooks/uninstall.sh
 ```
-
 Then remove the `hooks` and `statusLine` entries from `~/.claude/settings.json`.
+
+---
+
+### Cursor
+
+Add to `.cursor/rules/gen-z.mdc`:
+
+```
+---
+alwaysApply: true
+---
+```
+
+Paste the contents of `rules/gen-z-activate.md` below the frontmatter.
+
+---
+
+### GitHub Copilot
+
+Paste the contents of `rules/gen-z-activate.md` into `.github/copilot-instructions.md`.
+
+---
+
+### Windsurf
+
+Add the contents of `rules/gen-z-activate.md` to `.windsurf/rules/gen-z.md`.
+
+---
+
+### Cline
+
+Add the contents of `rules/gen-z-activate.md` to `.clinerules/gen-z.md`.
+
+---
+
+### One-time session (any agent)
+
+Paste the contents of `skills/gen-z/SKILL.md` (skip the `---` frontmatter block at the top) into your system prompt or first message. No install needed — works for a single session.
+
+---
+
+### Auto-activation (any agent)
+
+Natural language also triggers Gen Z mode — no slash command needed:
+
+> "talk like a student" / "bro mode" / "speak casual" / "use slang" / "be my friend"
