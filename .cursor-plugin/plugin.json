@@ -1,7 +1,8 @@
 {
   "name": "gen-z-claude-bro",
-  "version": "0.1.0",
+  "displayName": "Gen Z Claude Bro",
   "description": "Gen Z communication mode: slang-heavy, high-energy responses that stay technically accurate.",
+  "version": "0.1.0",
   "author": {
     "name": "kidskoding",
     "url": "https://github.com/kidskoding"

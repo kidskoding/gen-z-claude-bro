@@ -1,18 +1,17 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "gen-z-claude-bro",
-  "description": "Marketplace for the Gen Z Claude Bro plugin.",
   "owner": {
-    "name": "kidskoding",
-    "url": "https://github.com/kidskoding"
+    "name": "kidskoding"
+  },
+  "metadata": {
+    "description": "Marketplace for the Gen Z Claude Bro plugin."
   },
   "plugins": [
     {
       "name": "gen-z-claude-bro",
+      "source": "./",
       "description": "Gen Z communication mode: slang-heavy, high-energy responses that stay technically accurate.",
       "version": "0.1.0",
-      "source": "./",
-      "category": "productivity",
       "author": {
         "name": "kidskoding",
         "url": "https://github.com/kidskoding"

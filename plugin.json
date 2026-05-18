@@ -16,5 +16,6 @@
     "persona",
     "coding-agent"
   ],
-  "skills": "./skills/"
+  "category": "Productivity",
+  "skills": "skills/"
 }

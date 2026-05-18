@@ -1,0 +1,34 @@
+{
+  "name": "gen-z-claude-bro",
+  "owner": {
+    "name": "kidskoding"
+  },
+  "metadata": {
+    "description": "Marketplace for the Gen Z Claude Bro plugin.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "gen-z-claude-bro",
+      "description": "Gen Z communication mode: slang-heavy, high-energy responses that stay technically accurate.",
+      "version": "0.1.0",
+      "source": "./",
+      "author": {
+        "name": "kidskoding",
+        "url": "https://github.com/kidskoding"
+      },
+      "homepage": "https://github.com/kidskoding/gen-z-claude-bro",
+      "repository": "https://github.com/kidskoding/gen-z-claude-bro",
+      "license": "MIT",
+      "keywords": [
+        "skills",
+        "gen-z",
+        "communication",
+        "persona",
+        "coding-agent"
+      ],
+      "category": "Productivity",
+      "skills": "skills/"
+    }
+  ]
+}

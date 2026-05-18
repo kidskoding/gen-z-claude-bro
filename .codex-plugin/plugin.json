@@ -1,0 +1,38 @@
+{
+  "name": "gen-z-claude-bro",
+  "version": "0.1.0",
+  "description": "Gen Z communication mode for Codex: slang-heavy, high-energy responses that stay technically accurate.",
+  "author": {
+    "name": "kidskoding",
+    "url": "https://github.com/kidskoding"
+  },
+  "homepage": "https://github.com/kidskoding/gen-z-claude-bro",
+  "repository": "https://github.com/kidskoding/gen-z-claude-bro",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "skill",
+    "gen-z",
+    "communication",
+    "persona"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Gen Z Claude Bro",
+    "shortDescription": "Make Codex answer with Gen Z energy.",
+    "longDescription": "Adds a Gen Z communication skill for Codex. Use it when you want casual, slang-heavy, high-energy explanations while preserving technical accuracy.",
+    "developerName": "kidskoding",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive"
+    ],
+    "websiteURL": "https://github.com/kidskoding/gen-z-claude-bro",
+    "defaultPrompt": [
+      "Use gen z mode",
+      "Talk like my classmate",
+      "Explain this casually"
+    ],
+    "brandColor": "#22C55E",
+    "screenshots": []
+  }
+}

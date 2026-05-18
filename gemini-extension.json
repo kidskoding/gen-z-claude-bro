@@ -1,0 +1,6 @@
+{
+  "name": "gen-z-claude-bro",
+  "description": "Gen Z communication mode: slang-heavy, high-energy responses that stay technically accurate.",
+  "version": "0.1.0",
+  "contextFileName": "GEMINI.md"
+}

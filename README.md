@@ -63,14 +63,51 @@ Makes Claude speak like a Gen Z person — slang-heavy, high energy, still techn
 
 ---
 
-## Install
+## Installation
 
-### Claude Code — plugin (recommended)
+Installation differs by harness. If you use more than one agent, install this plugin separately in each one.
+
+### Codex CLI
+
+This repo includes a native Codex plugin manifest at `.codex-plugin/plugin.json`.
+
+Install from this GitHub repo:
+
+```
+/plugin install kidskoding/gen-z-claude-bro
+```
+
+Or, if you cloned the repo locally:
+
+```
+/plugin install /path/to/gen-z-claude-bro
+```
+
+Then ask Codex for Gen Z mode:
+
+| What you type | What happens |
+|---|---|
+| "use gen z mode" | Activate full Gen Z mode |
+| "use gen z mode lite" | Light slang, no emoji |
+| "use gen z mode ultra" | Maximum chaos |
+| "stop gen z" / "normal mode" | Deactivate |
+
+### Codex App
+
+Use the same plugin source as Codex CLI:
+
+```
+kidskoding/gen-z-claude-bro
+```
+
+If the app asks for a local plugin path, point it at the cloned repository root. The Codex manifest is `.codex-plugin/plugin.json`.
+
+### Claude Code
 
 In Claude Code, run:
 
 ```
-/marketplace add kidskoding/gen-z-claude-bro
+/plugin marketplace add kidskoding/gen-z-claude-bro
 /plugin install gen-z-claude-bro@gen-z-claude-bro
 ```
 
@@ -86,7 +123,77 @@ Restart Claude Code. Then:
 
 ---
 
-### Cursor
+### Cursor — plugin
+
+This repo includes a Cursor plugin manifest at `.cursor-plugin/plugin.json`.
+
+If the plugin has been added to your Cursor plugin marketplace:
+
+```
+/add-plugin gen-z-claude-bro
+```
+
+To add this repo as a Cursor marketplace, open Cursor Dashboard -> Settings -> Plugins, import a team marketplace, and paste:
+
+```
+https://github.com/kidskoding/gen-z-claude-bro
+```
+
+Then install it from Cursor Agent chat:
+
+```
+/add-plugin gen-z-claude-bro
+```
+
+For local development or private use:
+
+```
+git clone https://github.com/kidskoding/gen-z-claude-bro.git
+mkdir -p ~/.cursor/plugins/local
+ln -s "$(pwd)/gen-z-claude-bro" ~/.cursor/plugins/local/gen-z-claude-bro
+```
+
+Restart Cursor, then ask the agent to "use gen z mode".
+
+### GitHub Copilot CLI
+
+Direct install:
+
+```
+copilot plugin install kidskoding/gen-z-claude-bro
+```
+
+Marketplace-style install:
+
+```
+copilot plugin marketplace add kidskoding/gen-z-claude-bro
+copilot plugin install gen-z-claude-bro@gen-z-claude-bro
+```
+
+Inside an interactive Copilot CLI session, the same commands work with leading slashes:
+
+```
+/plugin marketplace add kidskoding/gen-z-claude-bro
+/plugin install gen-z-claude-bro@gen-z-claude-bro
+```
+
+### Gemini CLI
+
+This repo includes `gemini-extension.json` and `GEMINI.md`.
+
+Install:
+
+```
+gemini extensions install https://github.com/kidskoding/gen-z-claude-bro
+```
+
+Update later:
+
+```
+gemini extensions update gen-z-claude-bro
+```
+
+### Manual Cursor rule
 
 Add to `.cursor/rules/gen-z.mdc`:
 
