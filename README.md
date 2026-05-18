@@ -97,6 +97,7 @@ Then ask Codex for Gen Z mode:
 
 | What you type | What happens |
 |---|---|
+| New session after install | Gen Z mode starts automatically |
 | "use gen z mode" | Activate full Gen Z mode |
 | "use gen z mode lite" | Light slang, no emoji |
 | "use gen z mode ultra" | Maximum chaos |
