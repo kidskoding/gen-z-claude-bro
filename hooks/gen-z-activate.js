@@ -10,6 +10,7 @@ const SETTINGS_FILE = path.join(os.homedir(), '.claude', 'settings.json');
 
 // Write default mode to flag file
 try {
+  fs.mkdirSync(path.dirname(FLAG_FILE), { recursive: true });
   fs.writeFileSync(FLAG_FILE, 'full', 'utf8');
 } catch (_) {
   // silent fail — never block session start

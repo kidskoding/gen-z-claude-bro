@@ -101,7 +101,7 @@ Then ask Codex for Gen Z mode:
 | "use gen z mode" | Activate full Gen Z mode |
 | "use gen z mode lite" | Light slang, no emoji |
 | "use gen z mode ultra" | Maximum chaos |
-| "stop gen z" / "normal mode" | Deactivate |
+| "stop gen z" / "normal mode" | Deactivate for the current session |
 
 ### Codex App
 
@@ -129,7 +129,7 @@ Restart Claude Code. Then:
 | `/gen-z-claude-bro:bro` | Activate full Gen Z mode |
 | `/gen-z-claude-bro:bro lite` | Light slang, no emoji |
 | `/gen-z-claude-bro:bro ultra` | Maximum chaos |
-| "stop gen z" / "normal mode" | Deactivate |
+| "stop gen z" / "normal mode" | Deactivate for the current session |
 
 
 ---
