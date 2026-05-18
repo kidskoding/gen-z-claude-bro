@@ -69,7 +69,7 @@ Installation differs by harness. If you use more than one agent, install this pl
 
 ### Codex CLI
 
-This repo includes a native Codex plugin manifest at `.codex-plugin/plugin.json`.
+This repo includes a Codex marketplace catalog at `.agents/plugins/marketplace.json`.
 
 Add the marketplace, then install the plugin from it:
 
@@ -77,6 +77,14 @@ Add the marketplace, then install the plugin from it:
 /marketplace add kidskoding/gen-z-claude-bro
 /plugin install gen-z-claude-bro@gen-z-claude-bro
 ```
+
+In the `/plugins` UI, choose the option to add a marketplace and paste:
+
+```
+kidskoding/gen-z-claude-bro
+```
+
+Then install `gen-z-claude-bro` from that marketplace.
 
 Or, if you cloned the repo locally, add it as a local marketplace:
 

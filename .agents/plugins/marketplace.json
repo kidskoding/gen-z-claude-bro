@@ -8,7 +8,7 @@
       "name": "gen-z-claude-bro",
       "source": {
         "source": "local",
-        "path": "./"
+        "path": "./plugins/gen-z-claude-bro"
       },
       "policy": {
         "installation": "AVAILABLE",
