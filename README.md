@@ -71,16 +71,18 @@ Installation differs by harness. If you use more than one agent, install this pl
 
 This repo includes a native Codex plugin manifest at `.codex-plugin/plugin.json`.
 
-Install from this GitHub repo:
+Add the marketplace, then install the plugin from it:
 
 ```
-/plugin install kidskoding/gen-z-claude-bro
+/marketplace add kidskoding/gen-z-claude-bro
+/plugin install gen-z-claude-bro@gen-z-claude-bro
 ```
 
-Or, if you cloned the repo locally:
+Or, if you cloned the repo locally, add it as a local marketplace:
 
 ```
-/plugin install /path/to/gen-z-claude-bro
+/marketplace add /path/to/gen-z-claude-bro
+/plugin install gen-z-claude-bro@gen-z-claude-bro
 ```
 
 Then ask Codex for Gen Z mode:
@@ -94,13 +96,13 @@ Then ask Codex for Gen Z mode:
 
 ### Codex App
 
-Use the same plugin source as Codex CLI:
+Add the marketplace:
 
 ```
 kidskoding/gen-z-claude-bro
 ```
 
-If the app asks for a local plugin path, point it at the cloned repository root. The Codex manifest is `.codex-plugin/plugin.json`.
+Then install `gen-z-claude-bro` from that marketplace. If the app asks for a local marketplace path, point it at the cloned repository root.
 
 ### Claude Code
 
@@ -157,13 +159,7 @@ Restart Cursor, then ask the agent to "use gen z mode".
 
 ### GitHub Copilot CLI
 
-Direct install:
-
-```
-copilot plugin install kidskoding/gen-z-claude-bro
-```
-
-Marketplace-style install:
+Add the marketplace, then install the plugin from it:
 
 ```
 copilot plugin marketplace add kidskoding/gen-z-claude-bro

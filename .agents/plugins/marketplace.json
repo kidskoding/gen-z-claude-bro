@@ -1,0 +1,20 @@
+{
+  "name": "gen-z-claude-bro",
+  "interface": {
+    "displayName": "Gen Z Claude Bro"
+  },
+  "plugins": [
+    {
+      "name": "gen-z-claude-bro",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
