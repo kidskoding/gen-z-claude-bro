@@ -1,0 +1,15 @@
+{
+  "name": "gen-z-claude-bro",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Gen Z communication mode: slang-heavy, high-energy responses that stay technically accurate.",
+  "license": "MIT",
+  "scripts": {
+    "sync": "node scripts/sync.js",
+    "check": "node scripts/sync.js --check",
+    "test": "node scripts/sync.js --check && node --test test/hooks.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

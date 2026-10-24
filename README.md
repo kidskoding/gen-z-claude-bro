@@ -1,8 +1,22 @@
-# gen z claude bro
+<p align="center"><img src="assets/icon.png" width="128" alt="gen z claude bro icon"></p>
 
-**your AI coding assistant but make it gen z**
+<h1 align="center">gen z claude bro</h1>
 
-Makes Claude speak like a Gen Z person — slang-heavy, high energy, still technically accurate no cap. Works with Claude Code, Cursor, Copilot, Windsurf, Cline, and any agent that supports system prompts.
+<p align="center"><b>your AI coding assistant but make it gen z</b></p>
+
+<p align="center">
+  <a href="https://github.com/kidskoding/gen-z-claude-bro/actions/workflows/ci.yml"><img src="https://github.com/kidskoding/gen-z-claude-bro/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/github/package-json/v/kidskoding/gen-z-claude-bro?color=22C55E" alt="version">
+  <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license">
+</p>
+
+Makes your coding agent talk like a Gen Z person — slang-heavy, high energy, still technically accurate no cap. Your code, commits and PRs stay normal; only the chat gets the vibe. Works with Claude Code, Codex, Cursor, Copilot, Gemini CLI, Windsurf, Cline, and any agent that takes a system prompt.
+
+- **On by default.** Every new session starts in Gen Z mode. No setup prompt to remember.
+- **Three intensities.** `lite` for work chats, `full` for daily driving, `ultra` for chaos.
+- **Knows when to chill.** Security warnings and destructive-action confirmations drop the slang so nothing gets misread.
+- **Per-session.** "stop gen z" turns it off in that session only; your other terminals keep their vibe.
+- **Statusline badge** (Claude Code): `[GEN-Z]`, `[GEN-Z:LITE]`, `[GEN-Z:ULTRA]`.
 
 ---
 
@@ -63,9 +77,60 @@ Makes Claude speak like a Gen Z person — slang-heavy, high energy, still techn
 
 ---
 
-## Installation
+## Install
 
-Installation differs by harness. If you use more than one agent, install this plugin separately in each one.
+Installation differs by harness. If you use more than one agent, install it in each one.
+
+### Claude Code
+
+```
+/plugin marketplace add kidskoding/gen-z-claude-bro
+/plugin install gen-z-claude-bro@gen-z-claude-bro
+```
+
+Restart Claude Code and you're in — the next session starts in Gen Z mode.
+
+| What you type | What happens |
+|---|---|
+| `/gen-z-claude-bro:bro` or "bro mode" | Full Gen Z mode |
+| `/gen-z-claude-bro:bro lite` or "gen z mode lite" | Light slang, no emoji |
+| `/gen-z-claude-bro:bro ultra` or "gen z mode ultra" | Maximum chaos |
+| `/gen-z-claude-bro:bro off`, "stop gen z" or "normal mode" | Off for this session |
+
+#### Statusline badge
+
+Plugins can't set your statusline, so the first session shows a one-time tip. Add this to `~/.claude/settings.json`:
+
+```json
+"statusLine": {
+  "type": "command",
+  "command": "bash ~/.claude/gen-z-claude-bro/statusline.sh"
+}
+```
+
+Already have a statusline? Pipe the session JSON through the badge script and append its output to yours; `GEN_Z_STATUSLINE_COLOR=0` prints it without color:
+
+```bash
+input=$(cat)
+badge=$(printf '%s' "$input" | bash ~/.claude/gen-z-claude-bro/statusline.sh)
+echo "$(your-statusline <<<"$input") $badge"
+```
+
+#### Default intensity
+
+Set `GEN_Z_DEFAULT_MODE` to `lite`, `full` (default), `ultra` or `off` in your shell or in the `env` block of `settings.json`. With `off`, the plugin stays dormant until you type `/gen-z-claude-bro:bro`.
+
+#### Without the plugin system
+
+```
+git clone https://github.com/kidskoding/gen-z-claude-bro.git
+bash gen-z-claude-bro/hooks/install.sh
+```
+
+This copies the hooks and skill into `~/.claude/`, adds them to `settings.json` (backup at `settings.json.bak`) and sets the statusline if you don't have one. Commands are `/bro`, `/bro lite`, and so on. `hooks/uninstall.sh` reverses all of it.
+
+---
+
 
 ### Codex CLI
 
@@ -112,27 +177,6 @@ kidskoding/gen-z-claude-bro
 ```
 
 Then install `gen-z-claude-bro` from that marketplace. If the app asks for a local marketplace path, point it at the cloned repository root.
-
-### Claude Code
-
-In Claude Code, run:
-
-```
-/plugin marketplace add kidskoding/gen-z-claude-bro
-/plugin install gen-z-claude-bro@gen-z-claude-bro
-```
-
-Restart Claude Code. Then:
-
-| What you type | What happens |
-|---|---|
-| `/gen-z-claude-bro:bro` | Activate full Gen Z mode |
-| `/gen-z-claude-bro:bro lite` | Light slang, no emoji |
-| `/gen-z-claude-bro:bro ultra` | Maximum chaos |
-| "stop gen z" / "normal mode" | Deactivate for the current session |
-
-
----
 
 ### Cursor — plugin
 
@@ -230,14 +274,44 @@ Add the contents of `rules/gen-z-activate.md` to `.clinerules/gen-z.md`.
 
 ---
 
-### One-time session (any agent)
+### Any other agent
 
-Paste the contents of `skills/bro/SKILL.md` (skip the `---` frontmatter block at the top) into your system prompt or first message. No install needed — works for a single session.
+Paste the contents of `skills/bro/SKILL.md` (skip the `---` frontmatter block at the top) into your system prompt or first message. Works for a single session, no install.
+
+Natural language turns it on anywhere the skill is loaded:
+
+> "talk like a student" / "bro mode" / "speak casual" / "use slang" / "be my friend"
 
 ---
 
-### Auto-activation (any agent)
+## How it works
 
-Natural language also triggers Gen Z mode — no slash command needed:
+| Piece | Job |
+|---|---|
+| `skills/bro/SKILL.md` | The whole personality: vocab map, intensities, when to drop the slang. Every harness reads this file (or a copy of it). |
+| `hooks/gen-z-activate.js` | Claude Code `SessionStart`: picks the session's mode and injects the skill. |
+| `hooks/gen-z-mode-tracker.js` | Claude Code `UserPromptSubmit`: catches `/bro …` and "stop gen z", saves the mode, and tells the model. |
+| `hooks/gen-z-statusline.sh` | Prints the badge for the current session. |
 
-> "talk like a student" / "bro mode" / "speak casual" / "use slang" / "be my friend"
+Mode state lives in `~/.claude/gen-z-claude-bro/sessions/<session id>` and is cleaned up after a week.
+
+## Troubleshooting
+
+- **It's not talking Gen Z in Claude Code.** Run `/hooks` and check the two `gen-z` hooks are listed; if not, reinstall the plugin and restart. The hooks need `node` on your `PATH`.
+- **The badge never changes.** Make sure your `statusLine` points at `~/.claude/gen-z-claude-bro/statusline.sh`, not a path inside the plugin cache (that one moves on every update).
+- **I want it off by default.** `GEN_Z_DEFAULT_MODE=off`.
+
+## Contributing
+
+Edit behavior in `skills/bro/SKILL.md` only, then:
+
+```
+npm run sync   # copies the skill into the Codex plugin and stamps package.json's version on every manifest
+npm test       # sync check + hook tests
+```
+
+To release, bump `version` in `package.json`, run `npm run sync`, and add a `CHANGELOG.md` entry.
+
+## License
+
+MIT
