@@ -1,6 +1,6 @@
 {
   "name": "gen-z-claude-bro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Gen Z communication mode: slang-heavy, high-energy responses that stay technically accurate.",
   "author": {
     "name": "kidskoding",
@@ -17,5 +17,6 @@
     "coding-agent"
   ],
   "category": "Productivity",
-  "skills": "skills/"
+  "skills": "skills/",
+  "hooks": "hooks/hooks.copilot.json"
 }

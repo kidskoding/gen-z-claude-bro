@@ -1,6 +1,6 @@
 {
   "name": "gen-z-claude-bro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Gen Z communication mode for Codex: slang-heavy, high-energy responses that stay technically accurate.",
   "author": {
     "name": "kidskoding",
@@ -17,6 +17,7 @@
     "persona"
   ],
   "skills": "./skills/",
+  "hooks": "./hooks/hooks.codex.json",
   "interface": {
     "displayName": "Gen Z Claude Bro",
     "shortDescription": "Make Codex answer with Gen Z energy.",
@@ -33,6 +34,8 @@
       "Explain this casually"
     ],
     "brandColor": "#22C55E",
-    "screenshots": []
+    "screenshots": [],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
   }
 }

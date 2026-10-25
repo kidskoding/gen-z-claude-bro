@@ -1,52 +1,59 @@
 #!/usr/bin/env node
-// UserPromptSubmit hook — tracks session-local mode changes and "stop gen z"
+// UserPromptSubmit hook — tracks /bro intensity switches and "stop gen z" for this session
 
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const readline = require('readline');
+const state = require('./gen-z-state');
 
-const FLAG_FILE = path.join(os.homedir(), '.claude', '.gen-z-active');
+// $bro is how Codex mentions a skill
+const COMMANDS = ['/bro', '/gen-z-claude-bro:bro', '$bro'];
+const ON_PHRASES = ['gen z mode', 'bro mode', 'use gen z mode', 'speak gen z', 'talk like gen z'];
+const OFF_PHRASES = ['stop gen z', 'stop gen z mode', 'normal mode', 'gen z off', 'stop bro mode'];
 
-const MODE_MAP = {
-  '/bro lite': 'lite',
-  '/bro full': 'full',
-  '/bro ultra': 'ultra',
-  '/bro': 'full',
-  // namespaced form when installed as plugin
-  '/gen-z-claude-bro:bro lite': 'lite',
-  '/gen-z-claude-bro:bro full': 'full',
-  '/gen-z-claude-bro:bro ultra': 'ultra',
-  '/gen-z-claude-bro:bro': 'full',
-};
+// Returns 'lite' | 'full' | 'ultra' | 'off' | null
+function parseMode(prompt) {
+  const text = prompt
+    .trim()
+    .toLowerCase()
+    .replace(/[\s.!?]+$/, '')
+    .replace(/\s+/g, ' ');
+  if (OFF_PHRASES.includes(text)) return state.OFF;
 
-const STOP_PHRASES = ['stop gen z', 'normal mode'];
-
-const rl = readline.createInterface({ input: process.stdin });
-let data = '';
-
-rl.on('line', line => { data += line; });
-rl.on('close', () => {
-  try {
-    const input = JSON.parse(data);
-    const prompt = (input.prompt || '').trim().toLowerCase();
-
-    if (STOP_PHRASES.some(p => prompt === p)) {
-      try { fs.unlinkSync(FLAG_FILE); } catch (_) {}
-      return;
-    }
-
-    const modeEntries = Object.entries(MODE_MAP).sort((a, b) => b[0].length - a[0].length);
-    for (const [cmd, mode] of modeEntries) {
-      if (prompt === cmd || prompt.startsWith(cmd + ' ')) {
-        try {
-          fs.mkdirSync(path.dirname(FLAG_FILE), { recursive: true });
-          fs.writeFileSync(FLAG_FILE, mode, 'utf8');
-        } catch (_) {}
-        return;
-      }
-    }
-  } catch (_) {
-    // silent fail
+  const [head, arg = ''] = text.split(' ');
+  if (COMMANDS.includes(head)) {
+    if (!arg) return 'full';
+    if (arg === state.OFF || arg === 'stop') return state.OFF;
+    return state.MODES.includes(arg) ? arg : 'full';
   }
-});
+
+  for (const phrase of ON_PHRASES) {
+    if (text === phrase) return 'full';
+    const level = text.startsWith(phrase + ' ') ? text.slice(phrase.length + 1) : '';
+    if (state.MODES.includes(level)) return level;
+  }
+  return null;
+}
+
+function main() {
+  const input = state.readStdinJson();
+  const next = parseMode(String(input.prompt || ''));
+  if (!next) return;
+
+  const previous = state.readMode(input.session_id) || state.defaultMode();
+  state.writeMode(input.session_id, next);
+
+  if (next === state.OFF) {
+    state.emit(
+      'UserPromptSubmit',
+      'The user turned Gen Z mode OFF for this session. Respond in your normal voice from now on, with no Gen Z slang, until they turn it back on.'
+    );
+  } else if (previous === state.OFF) {
+    // the rules may not be in context (e.g. resumed while off), so send them again
+    const body = state.loadSkillBody();
+    state.emit('UserPromptSubmit', `${body}\n\nThe user turned Gen Z mode back ON at **${next}** intensity.`);
+  } else {
+    state.emit('UserPromptSubmit', `Gen Z mode intensity is now **${next}**. Match that level from this response on.`);
+  }
+}
+
+if (require.main === module) main();
+
+module.exports = { parseMode };

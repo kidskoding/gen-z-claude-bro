@@ -1,0 +1,27 @@
+{
+  "description": "Gen Z mode: starts each session in Gen Z mode and tracks /bro and \"stop gen z\" switches.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/hooks/run.sh\" gen-z-activate.js claude",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/hooks/run.sh\" gen-z-mode-tracker.js claude",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
