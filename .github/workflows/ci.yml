@@ -11,13 +11,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      # the hooks themselves run on node in Claude Code, and the tests spawn them with it
+      # most installs run the hooks on node, so test them there too
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Manifests and Codex copy in sync
+      - name: Manifests and generated files in sync
         run: bun run check
-      - name: Hook tests
+      - name: Tests (bun)
         run: bun test
+      - name: Tests (node)
+        run: node --test test/*.test.js
       - name: Shell syntax
-        run: bash -n hooks/*.sh
+        run: |
+          bash -n hooks/*.sh
+          sh -n hooks/run.sh
+      - name: skills.sh CLI finds the bro skill
+        env:
+          DISABLE_TELEMETRY: '1'
+        run: bunx skills@latest add . --list 2>&1 | tee skills.txt && grep -q '\bbro\b' skills.txt
+      - name: Gemini CLI extension is valid
+        run: bunx @google/gemini-cli@latest extensions validate .

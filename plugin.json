@@ -17,5 +17,6 @@
     "coding-agent"
   ],
   "category": "Productivity",
-  "skills": "skills/"
+  "skills": "skills/",
+  "hooks": "hooks/hooks.copilot.json"
 }

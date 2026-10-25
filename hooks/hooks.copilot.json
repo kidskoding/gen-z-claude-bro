@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "bash": "sh \"$COPILOT_PLUGIN_ROOT/hooks/run.sh\" gen-z-activate.js copilot",
+        "timeoutSec": 10
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "type": "command",
+        "bash": "sh \"$COPILOT_PLUGIN_ROOT/hooks/run.sh\" gen-z-mode-tracker.js copilot",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

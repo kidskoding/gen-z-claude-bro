@@ -10,20 +10,25 @@ SKILLS_DIR="$CLAUDE_DIR/skills/bro"
 SETTINGS="$CLAUDE_DIR/settings.json"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-command -v node >/dev/null || { echo "✗ node is required for the gen-z hooks" >&2; exit 1; }
+if command -v node >/dev/null; then JS=node
+elif command -v bun >/dev/null; then JS=bun
+else echo "✗ the gen-z hooks need node or bun on your PATH" >&2; exit 1
+fi
 
 mkdir -p "$HOOKS_DIR" "$SKILLS_DIR"
 
 for f in gen-z-activate.js gen-z-mode-tracker.js gen-z-state.js gen-z-statusline.sh; do
   cp "$SCRIPT_DIR/$f" "$HOOKS_DIR/"
 done
-chmod +x "$HOOKS_DIR/gen-z-activate.js" "$HOOKS_DIR/gen-z-mode-tracker.js" "$HOOKS_DIR/gen-z-statusline.sh"
+# prefixed copy so it can't clash with other tools' hooks in the shared dir
+cp "$SCRIPT_DIR/run.sh" "$HOOKS_DIR/gen-z-run.sh"
+chmod +x "$HOOKS_DIR/gen-z-activate.js" "$HOOKS_DIR/gen-z-mode-tracker.js" "$HOOKS_DIR/gen-z-statusline.sh" "$HOOKS_DIR/gen-z-run.sh"
 cp "$SCRIPT_DIR/../skills/bro/SKILL.md" "$SKILLS_DIR/"
 
 echo "✓ gen-z hooks installed to $HOOKS_DIR"
 echo "✓ gen-z skill installed to $SKILLS_DIR"
 
-node "$SCRIPT_DIR/gen-z-settings.js" install "$SETTINGS" "$HOOKS_DIR"
+"$JS" "$SCRIPT_DIR/gen-z-settings.js" install "$SETTINGS" "$HOOKS_DIR"
 echo "✓ hooks added to $SETTINGS (backup at settings.json.bak)"
 echo ""
 echo "Restart Claude Code and you're in. fr fr."

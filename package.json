@@ -7,6 +7,9 @@
   "scripts": {
     "sync": "bun scripts/sync.js",
     "check": "bun scripts/sync.js --check",
-    "test": "bun scripts/sync.js --check && bun test"
-  }
+    "test": "bun scripts/sync.js --check && bun test",
+    "skills:list": "DISABLE_TELEMETRY=1 bunx skills@latest add . --list"
+  },
+  "packageManager": "bun@1.4.2",
+  "repository": "https://github.com/kidskoding/gen-z-claude-bro"
 }

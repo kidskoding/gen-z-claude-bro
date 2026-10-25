@@ -17,5 +17,7 @@
     "persona",
     "coding-agent"
   ],
-  "skills": "./skills/"
+  "logo": "assets/icon.png",
+  "skills": "./skills/",
+  "rules": "./rules/gen-z.mdc"
 }

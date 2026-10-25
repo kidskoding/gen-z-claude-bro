@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/gen-z-activate.js\"",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/hooks/run.sh\" gen-z-activate.js claude",
             "timeout": 10
           }
         ]
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/gen-z-mode-tracker.js\"",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/hooks/run.sh\" gen-z-mode-tracker.js claude",
             "timeout": 10
           }
         ]

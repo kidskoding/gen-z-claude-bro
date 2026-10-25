@@ -7,6 +7,7 @@
 <p align="center">
   <a href="https://github.com/kidskoding/gen-z-claude-bro/actions/workflows/ci.yml"><img src="https://github.com/kidskoding/gen-z-claude-bro/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/github/package-json/v/kidskoding/gen-z-claude-bro?color=22C55E" alt="version">
+  <a href="https://skills.sh/kidskoding/gen-z-claude-bro"><img src="https://img.shields.io/badge/skills.sh-bro-000" alt="skills.sh"></a>
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license">
 </p>
 
@@ -17,6 +18,7 @@ Makes your coding agent talk like a Gen Z person — slang-heavy, high energy, s
 - **Knows when to chill.** Security warnings and destructive-action confirmations drop the slang so nothing gets misread.
 - **Per-session.** "stop gen z" turns it off in that session only; your other terminals keep their vibe.
 - **Statusline badge** (Claude Code): `[GEN-Z]`, `[GEN-Z:LITE]`, `[GEN-Z:ULTRA]`.
+- **Every major harness.** Native plugins for Claude Code, Codex, Copilot CLI, Cursor and Gemini CLI, plus [skills.sh](https://skills.sh/kidskoding/gen-z-claude-bro) for the other 40+ agents.
 
 ---
 
@@ -79,7 +81,33 @@ Makes your coding agent talk like a Gen Z person — slang-heavy, high energy, s
 
 ## Install
 
-Installation differs by harness. If you use more than one agent, install it in each one.
+Pick your harness. Using more than one? Install it in each.
+
+| Harness | Install | Always on | Switch intensity |
+|---|---|---|---|
+| [Claude Code](#claude-code) | plugin | ✅ hooks | `/gen-z-claude-bro:bro ultra` |
+| [Codex](#codex) | plugin | ✅ hooks (trust once) | `$bro ultra` |
+| [GitHub Copilot CLI](#github-copilot-cli) | plugin | ✅ hooks | `/bro ultra` |
+| [Cursor](#cursor) | plugin | ✅ rule | "gen z mode ultra" |
+| [Gemini CLI](#gemini-cli) | extension | ✅ context file | "gen z mode ultra" |
+| [Any agent via skills.sh](#any-agent-skillssh) | `npx skills add` | on trigger ¹ | "gen z mode ultra" |
+| [Windsurf, Cline, Copilot in VS Code](#rules-files) | rules file | ✅ rule | "gen z mode ultra" |
+
+¹ Skills load when the agent picks them. For always-on, also paste [`rules/gen-z-activate.md`](rules/gen-z-activate.md) into your `AGENTS.md`.
+
+The hooks run on `node` or `bun`, whichever is on your `PATH`. With neither, they skip quietly and the skill still works.
+
+### Any agent (skills.sh)
+
+Installs the `bro` skill into OpenCode, Codex, Cursor, Claude Code, Gemini CLI, Windsurf, Cline and every other agent the [skills CLI](https://skills.sh) supports:
+
+```sh
+npx skills add kidskoding/gen-z-claude-bro
+# or with bun
+bunx skills add kidskoding/gen-z-claude-bro
+```
+
+Add `-g` to install for your user instead of the current project, or `-a opencode` to target one agent. Update with `npx skills update`. This installs the skill only; the native plugins below add the hooks that turn it on automatically.
 
 ### Claude Code
 
@@ -131,104 +159,58 @@ This copies the hooks and skill into `~/.claude/`, adds them to `settings.json` 
 
 ---
 
+### Codex
 
-### Codex CLI
-
-This repo includes a Codex marketplace catalog at `.agents/plugins/marketplace.json`.
-
-Add the marketplace, then install the plugin from it:
-
-```
-/marketplace add kidskoding/gen-z-claude-bro
-/plugin install gen-z-claude-bro@gen-z-claude-bro
+```sh
+codex plugin marketplace add kidskoding/gen-z-claude-bro
+codex plugin add gen-z-claude-bro@gen-z-claude-bro
 ```
 
-In the `/plugins` UI, choose the option to add a marketplace and paste:
+In the Codex app or TUI you can instead open `/plugins`, add the marketplace `kidskoding/gen-z-claude-bro` and install `gen-z-claude-bro`.
 
-```
-kidskoding/gen-z-claude-bro
-```
-
-Then install `gen-z-claude-bro` from that marketplace.
-
-Or, if you cloned the repo locally, add it as a local marketplace:
-
-```
-/marketplace add /path/to/gen-z-claude-bro
-/plugin install gen-z-claude-bro@gen-z-claude-bro
-```
-
-Then ask Codex for Gen Z mode:
+The plugin ships two hooks. Codex runs a plugin's hooks only after you trust them, so the next session asks once: pick **Trust all and continue**, or review them in `/hooks`. Until then the skill still works when you ask for it.
 
 | What you type | What happens |
 |---|---|
-| New session after install | Gen Z mode starts automatically |
-| "use gen z mode" | Activate full Gen Z mode |
-| "use gen z mode lite" | Light slang, no emoji |
-| "use gen z mode ultra" | Maximum chaos |
-| "stop gen z" / "normal mode" | Deactivate for the current session |
+| New session | Gen Z mode, `full` intensity |
+| `$bro lite` or "gen z mode lite" | Light slang, no emoji |
+| `$bro ultra` or "gen z mode ultra" | Maximum chaos |
+| `$bro off`, "stop gen z" or "normal mode" | Off for this session |
 
-### Codex App
+### Cursor
 
-Add the marketplace:
-
-```
-kidskoding/gen-z-claude-bro
-```
-
-Then install `gen-z-claude-bro` from that marketplace. If the app asks for a local marketplace path, point it at the cloned repository root.
-
-### Cursor — plugin
-
-This repo includes a Cursor plugin manifest at `.cursor-plugin/plugin.json`.
-
-If the plugin has been added to your Cursor plugin marketplace:
+Add the plugin from Cursor Agent chat:
 
 ```
 /add-plugin gen-z-claude-bro
 ```
 
-To add this repo as a Cursor marketplace, open Cursor Dashboard -> Settings -> Plugins, import a team marketplace, and paste:
+Not listed in your marketplace yet? Open Cursor Dashboard → Settings → Plugins, import a team marketplace, paste `https://github.com/kidskoding/gen-z-claude-bro`, then run `/add-plugin gen-z-claude-bro`.
 
-```
-https://github.com/kidskoding/gen-z-claude-bro
-```
+The plugin ships an always-apply rule plus the skill. If Settings → Rules shows `gen-z` as "Agent Decides", switch it to **Always**; some Cursor versions downgrade plugin rules.
 
-Then install it from Cursor Agent chat:
+For local development:
 
-```
-/add-plugin gen-z-claude-bro
-```
-
-For local development or private use:
-
-```
+```sh
 git clone https://github.com/kidskoding/gen-z-claude-bro.git
 mkdir -p ~/.cursor/plugins/local
 ln -s "$(pwd)/gen-z-claude-bro" ~/.cursor/plugins/local/gen-z-claude-bro
+# or, for one cursor-agent run:
+cursor-agent --plugin-dir ./gen-z-claude-bro
 ```
-
-Restart Cursor, then ask the agent to "use gen z mode".
 
 ### GitHub Copilot CLI
 
-Add the marketplace, then install the plugin from it:
-
-```
+```sh
 copilot plugin marketplace add kidskoding/gen-z-claude-bro
 copilot plugin install gen-z-claude-bro@gen-z-claude-bro
 ```
 
-Inside an interactive Copilot CLI session, the same commands work with leading slashes:
-
-```
-/plugin marketplace add kidskoding/gen-z-claude-bro
-/plugin install gen-z-claude-bro@gen-z-claude-bro
-```
+Inside an interactive session, the same commands work with a leading `/`. The plugin's hooks start every session in Gen Z mode; `/bro ultra`, "gen z mode lite" and "stop gen z" switch it, including as the prompt you pass to `copilot -p`.
 
 ### Gemini CLI
 
-This repo includes `gemini-extension.json` and `GEMINI.md`.
+The extension loads the skill through `GEMINI.md`, so every session starts in Gen Z mode.
 
 Install:
 
@@ -242,39 +224,21 @@ Update later:
 gemini extensions update gen-z-claude-bro
 ```
 
-### Manual Cursor rule
+### Rules files
 
-Add to `.cursor/rules/gen-z.mdc`:
+For harnesses without plugins, paste [`rules/gen-z-activate.md`](rules/gen-z-activate.md) into their always-on rules file:
 
-```
----
-alwaysApply: true
----
-```
-
-Paste the contents of `rules/gen-z-activate.md` below the frontmatter.
-
----
-
-### GitHub Copilot
-
-Paste the contents of `rules/gen-z-activate.md` into `.github/copilot-instructions.md`.
+| Harness | File |
+|---|---|
+| Cursor (no plugin) | `.cursor/rules/gen-z.mdc` — or copy [`rules/gen-z.mdc`](rules/gen-z.mdc), which already has the `alwaysApply` frontmatter |
+| GitHub Copilot in VS Code / github.com | `.github/copilot-instructions.md` |
+| Windsurf | `.windsurf/rules/gen-z.md` |
+| Cline | `.clinerules/gen-z.md` |
+| OpenCode, Codex, Amp and other `AGENTS.md` readers | `AGENTS.md` |
 
 ---
 
-### Windsurf
-
-Add the contents of `rules/gen-z-activate.md` to `.windsurf/rules/gen-z.md`.
-
----
-
-### Cline
-
-Add the contents of `rules/gen-z-activate.md` to `.clinerules/gen-z.md`.
-
----
-
-### Any other agent
+### One session, no install
 
 Paste the contents of `skills/bro/SKILL.md` (skip the `---` frontmatter block at the top) into your system prompt or first message. Works for a single session, no install.
 
@@ -292,22 +256,28 @@ Natural language turns it on anywhere the skill is loaded:
 | `hooks/gen-z-activate.js` | Claude Code `SessionStart`: picks the session's mode and injects the skill. |
 | `hooks/gen-z-mode-tracker.js` | Claude Code `UserPromptSubmit`: catches `/bro …` and "stop gen z", saves the mode, and tells the model. |
 | `hooks/gen-z-statusline.sh` | Prints the badge for the current session. |
+| `hooks/run.sh` | Picks `node` or `bun` to run the hooks. |
+| `hooks/hooks.json` / `hooks.codex.json` / `hooks.copilot.json` | The same two hooks wired up for Claude Code, Codex and Copilot CLI. |
+| `rules/gen-z-activate.md` | Short always-on version of the skill for Cursor, Windsurf, Cline and `AGENTS.md`. |
 
-Mode state lives in `~/.claude/gen-z-claude-bro/sessions/<session id>` and is cleaned up after a week.
+Mode state lives per session and is cleaned up after a week: `~/.claude/gen-z-claude-bro/sessions/` for Claude Code, and each plugin's data directory for Codex and Copilot CLI.
 
 ## Troubleshooting
 
-- **It's not talking Gen Z in Claude Code.** Run `/hooks` and check the two `gen-z` hooks are listed; if not, reinstall the plugin and restart. The hooks need `node` on your `PATH`.
+- **It's not talking Gen Z in Claude Code.** Run `/hooks` and check the two `gen-z` hooks are listed; if not, reinstall the plugin and restart. The hooks need `node` or `bun` on your `PATH`.
+- **Codex ignores it.** Open `/hooks` and trust the two `gen-z-claude-bro` hooks. Codex skips untrusted plugin hooks silently.
+- **Skill installed with `npx skills` but it stays normal.** Skills load when the agent picks them. Say "bro mode", or paste `rules/gen-z-activate.md` into `AGENTS.md` for always-on.
 - **The badge never changes.** Make sure your `statusLine` points at `~/.claude/gen-z-claude-bro/statusline.sh`, not a path inside the plugin cache (that one moves on every update).
 - **I want it off by default.** `GEN_Z_DEFAULT_MODE=off`.
 
 ## Contributing
 
-Edit behavior in `skills/bro/SKILL.md` only, then:
+Edit behavior in `skills/bro/SKILL.md` (and the short form in `rules/gen-z-activate.md`), then:
 
-```
-bun run sync   # copies the skill into the Codex plugin and stamps package.json's version on every manifest
-bun run test   # sync check + hook tests
+```sh
+bun run sync          # stamps package.json's version everywhere and regenerates rules/gen-z.mdc
+bun run test          # sync check + hook and manifest tests
+bun run skills:list   # what skills.sh will see
 ```
 
 To release, bump `version` in `package.json`, run `bun run sync`, and add a `CHANGELOG.md` entry.

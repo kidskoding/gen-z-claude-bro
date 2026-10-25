@@ -10,12 +10,20 @@ const MODES = ['lite', 'full', 'ultra'];
 const OFF = 'off';
 const STALE_MS = 7 * 24 * 60 * 60 * 1000;
 
+// Each harness's hooks file passes its name as the first argument. Codex and Copilot CLI
+// speak Claude Code's hook protocol closely enough to share these scripts; env vars can't
+// tell them apart because a harness launched from inside another inherits its variables.
+const HARNESSES = ['claude', 'codex', 'copilot'];
+const HARNESS = HARNESSES.includes(process.argv[2]) ? process.argv[2] : 'claude';
+
 function claudeDir() {
   return process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
 }
 
 function stateDir() {
-  return path.join(claudeDir(), 'gen-z-claude-bro');
+  if (HARNESS === 'claude') return path.join(claudeDir(), 'gen-z-claude-bro');
+  const data = HARNESS === 'copilot' ? process.env.COPILOT_PLUGIN_DATA : process.env.PLUGIN_DATA;
+  return data || path.join(os.homedir(), `.${HARNESS}`, 'gen-z-claude-bro');
 }
 
 function sessionKey(sessionId) {
@@ -47,6 +55,7 @@ function writeMode(sessionId, mode) {
     const file = sessionFile(sessionId);
     fs.mkdirSync(path.dirname(file), { recursive: true });
     fs.writeFileSync(file, mode, 'utf8');
+    if (HARNESS !== 'claude') return;
     // legacy single flag file, still read by older statusline setups
     const legacy = path.join(claudeDir(), '.gen-z-active');
     if (mode === OFF) fs.rmSync(legacy, { force: true });
@@ -90,6 +99,8 @@ function loadSkillBody() {
 
 function emit(eventName, additionalContext, systemMessage) {
   const out = { hookSpecificOutput: { hookEventName: eventName, additionalContext } };
+  // Copilot CLI reads additionalContext from the top level
+  if (HARNESS === 'copilot') out.additionalContext = additionalContext;
   if (systemMessage) out.systemMessage = systemMessage;
   process.stdout.write(JSON.stringify(out));
 }
@@ -97,6 +108,7 @@ function emit(eventName, additionalContext, systemMessage) {
 module.exports = {
   MODES,
   OFF,
+  HARNESS,
   claudeDir,
   stateDir,
   defaultMode,

@@ -1,0 +1,27 @@
+{
+  "description": "Gen Z mode: starts each Codex session in Gen Z mode and tracks /bro and \"stop gen z\" switches.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${PLUGIN_ROOT}/hooks/run.sh\" gen-z-activate.js codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${PLUGIN_ROOT}/hooks/run.sh\" gen-z-mode-tracker.js codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

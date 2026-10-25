@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Keeps every harness manifest and the Codex plugin copy in sync with the sources of truth:
-//   version → package.json, skill → skills/bro/SKILL.md, Codex manifest → .codex-plugin/plugin.json
-// `node scripts/sync.js` rewrites drifted files; `--check` only reports them and exits 1.
+// Keeps every harness manifest and generated file in sync with the sources of truth:
+//   version → package.json, Cursor rule → rules/gen-z-activate.md
+// `bun scripts/sync.js` rewrites drifted files; `--check` only reports them and exits 1.
 
 const fs = require('fs');
 const path = require('path');
@@ -47,12 +47,17 @@ setVersions('.cursor-plugin/plugin.json', top);
 setVersions('.cursor-plugin/marketplace.json', firstPlugin);
 setVersions('.github/plugin/marketplace.json', [['metadata', 'version'], ...firstPlugin]);
 
-// the Codex marketplace installs from plugins/gen-z-claude-bro, so it carries its own copies
-const codexManifest = check
-  ? fs.readFileSync(path.join(root, '.codex-plugin/plugin.json'), 'utf8')
-  : JSON.stringify({ ...readJson('.codex-plugin/plugin.json'), version }, null, 2) + '\n';
-write('plugins/gen-z-claude-bro/.codex-plugin/plugin.json', codexManifest);
-write('plugins/gen-z-claude-bro/skills/bro/SKILL.md', fs.readFileSync(path.join(root, 'skills/bro/SKILL.md'), 'utf8'));
+// skills.sh and other Agent Skills tools read the version from the skill's own metadata
+const skillFile = 'skills/bro/SKILL.md';
+const skill = fs.readFileSync(path.join(root, skillFile), 'utf8');
+write(skillFile, skill.replace(/^(  version: ).*$/m, `$1"${version}"`));
+
+// Cursor plugins load rules as .mdc; alwaysApply keeps the vibe on without the skill being picked
+const rule = fs.readFileSync(path.join(root, 'rules/gen-z-activate.md'), 'utf8');
+write(
+  'rules/gen-z.mdc',
+  `---\ndescription: Gen Z communication mode (gen-z-claude-bro). Generated from rules/gen-z-activate.md by \`bun run sync\`.\nalwaysApply: true\n---\n\n${rule}`
+);
 
 if (drifted.length === 0) {
   console.log(`✓ everything in sync at v${version}`);

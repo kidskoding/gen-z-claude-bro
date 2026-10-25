@@ -3,7 +3,8 @@
 
 const state = require('./gen-z-state');
 
-const COMMANDS = ['/bro', '/gen-z-claude-bro:bro'];
+// $bro is how Codex mentions a skill
+const COMMANDS = ['/bro', '/gen-z-claude-bro:bro', '$bro'];
 const ON_PHRASES = ['gen z mode', 'bro mode', 'use gen z mode', 'speak gen z', 'talk like gen z'];
 const OFF_PHRASES = ['stop gen z', 'stop gen z mode', 'normal mode', 'gen z off', 'stop bro mode'];
 

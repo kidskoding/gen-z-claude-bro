@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const state = require('./gen-z-state');
+const { parseMode } = require('./gen-z-mode-tracker');
 
 const input = state.readStdinJson();
 const sessionId = input.session_id;
@@ -11,23 +12,30 @@ const sessionId = input.session_id;
 // resume and compact continue a session, so keep whatever mode it had;
 // startup and clear begin fresh in the default mode
 const continuing = input.source === 'resume' || input.source === 'compact';
-const mode = (continuing && state.readMode(sessionId)) || state.defaultMode();
+// Copilot CLI hands the first prompt to SessionStart and fires no UserPromptSubmit for it
+const asked = parseMode(String(input.initial_prompt || ''));
+const mode = asked || (continuing && state.readMode(sessionId)) || state.defaultMode();
 state.writeMode(sessionId, mode);
 state.pruneStaleSessions();
+
+// The statusline badge is Claude Code only
+const claude = state.HARNESS === 'claude';
 
 // Copy the statusline script to a stable path: the plugin cache path changes on every update
 const statuslineTarget = path.join(state.stateDir(), 'statusline.sh');
 try {
-  fs.mkdirSync(state.stateDir(), { recursive: true });
-  fs.copyFileSync(path.join(__dirname, 'gen-z-statusline.sh'), statuslineTarget);
-  fs.chmodSync(statuslineTarget, 0o755);
+  if (claude) {
+    fs.mkdirSync(state.stateDir(), { recursive: true });
+    fs.copyFileSync(path.join(__dirname, 'gen-z-statusline.sh'), statuslineTarget);
+    fs.chmodSync(statuslineTarget, 0o755);
+  }
 } catch (_) {}
 
 // Nudge statusline setup once, shown to the user rather than the model
 let nudge = '';
 try {
   const marker = path.join(state.stateDir(), '.statusline-nudged');
-  if (!fs.existsSync(marker)) {
+  if (claude && !fs.existsSync(marker)) {
     let settings = {};
     try {
       settings = JSON.parse(fs.readFileSync(path.join(state.claudeDir(), 'settings.json'), 'utf8'));

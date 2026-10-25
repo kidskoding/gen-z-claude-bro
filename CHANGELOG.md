@@ -10,7 +10,11 @@
 - Colored statusline badge that follows the current session, installed at a stable path that survives plugin updates. The setup tip shows once, to you, not the model.
 - `hooks/install.sh` now patches `settings.json` itself (idempotent, with a `.bak`), and `uninstall.sh` reverses it. The old snippet used a hook format Claude Code no longer accepts.
 - Gemini CLI imports the skill directly via `GEMINI.md`.
-- Plugin icon, `bun test` suite, CI, and `bun run sync` to keep all nine manifests and the Codex copy of the skill on one version.
+- **Works across harnesses, verified in each.** Codex and GitHub Copilot CLI plugins now ship the same hooks as Claude Code, so they start every session in Gen Z mode too (Codex asks you to trust the hooks once). Cursor's plugin adds an always-apply rule. Codex installs from the repo root; the `plugins/gen-z-claude-bro` copy is gone.
+- **Installable from [skills.sh](https://skills.sh):** `npx skills add kidskoding/gen-z-claude-bro` (or `bunx`). SKILL.md frontmatter now follows the Agent Skills spec, with `license` and `metadata.version`.
+- **Hooks run on node or bun**, whichever is installed, and skip quietly with neither (Claude Code's native installer ships no JS runtime).
+- `$bro` switches intensity in Codex; Copilot's `copilot -p "/bro ultra"` works because the first prompt is read at session start.
+- Plugin icon, `bun test` suite (also run on node in CI), skills.sh and Gemini extension checks in CI, and `bun run sync` to keep every manifest on one version.
 
 ## 0.1.0
 

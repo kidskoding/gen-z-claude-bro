@@ -8,8 +8,8 @@ const [action, settingsFile, hooksDir] = process.argv.slice(2);
 const MARKER = 'gen-z-';
 
 const ENTRIES = {
-  SessionStart: `node "${hooksDir}/gen-z-activate.js"`,
-  UserPromptSubmit: `node "${hooksDir}/gen-z-mode-tracker.js"`,
+  SessionStart: `sh "${hooksDir}/gen-z-run.sh" gen-z-activate.js`,
+  UserPromptSubmit: `sh "${hooksDir}/gen-z-run.sh" gen-z-mode-tracker.js`,
 };
 
 let settings = {};

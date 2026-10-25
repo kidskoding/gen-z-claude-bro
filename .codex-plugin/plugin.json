@@ -17,6 +17,7 @@
     "persona"
   ],
   "skills": "./skills/",
+  "hooks": "./hooks/hooks.codex.json",
   "interface": {
     "displayName": "Gen Z Claude Bro",
     "shortDescription": "Make Codex answer with Gen Z energy.",
@@ -33,6 +34,8 @@
       "Explain this casually"
     ],
     "brandColor": "#22C55E",
-    "screenshots": []
+    "screenshots": [],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
   }
 }

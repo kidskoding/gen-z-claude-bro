@@ -145,3 +145,64 @@ test('settings patcher is idempotent and reversible', () => {
     hooks: { SessionStart: [{ hooks: [{ type: 'command', command: 'echo hi' }] }] },
   });
 });
+
+function runner(file, input, env, args = []) {
+  return spawnSync('sh', [path.join(hooks, 'run.sh'), file, ...args], {
+    input: JSON.stringify(input),
+    env: { ...process.env, GEN_Z_DEFAULT_MODE: '', ...env },
+    encoding: 'utf8',
+  });
+}
+
+test('run.sh passes the harness through and exits silently with no JS runtime', () => {
+  const { dir, mode } = sandbox();
+  const res = runner('gen-z-activate.js', { session_id: 'r', source: 'startup' }, { CLAUDE_CONFIG_DIR: dir }, ['claude']);
+  assert.strictEqual(res.status, 0, res.stderr);
+  assert.match(res.stdout, /hookSpecificOutput/);
+  assert.strictEqual(mode('r'), 'full');
+
+  // a PATH with only the shell tools run.sh needs, so neither node nor bun is found
+  const bin = fs.mkdtempSync(path.join(os.tmpdir(), 'gen-z-bin-'));
+  for (const tool of ['sh', 'dirname', 'cat']) {
+    const found = spawnSync('sh', ['-c', `command -v ${tool}`], { encoding: 'utf8' }).stdout.trim();
+    fs.symlinkSync(found, path.join(bin, tool));
+  }
+  const bare = runner('gen-z-activate.js', { session_id: 'r' }, { CLAUDE_CONFIG_DIR: dir, PATH: bin });
+  assert.strictEqual(bare.status, 0, bare.stderr);
+  assert.strictEqual(bare.stdout + bare.stderr, '');
+});
+
+test('hooks also run on bun', { skip: !spawnSync('sh', ['-c', 'command -v bun']).stdout.length }, () => {
+  const { dir, mode } = sandbox();
+  const res = spawnSync('bun', [path.join(hooks, 'gen-z-mode-tracker.js')], {
+    input: JSON.stringify({ session_id: 'b', prompt: '/bro ultra' }),
+    env: { ...process.env, CLAUDE_CONFIG_DIR: dir },
+    encoding: 'utf8',
+  });
+  assert.strictEqual(res.status, 0, res.stderr);
+  assert.match(JSON.parse(res.stdout).hookSpecificOutput.additionalContext, /ultra/);
+  assert.strictEqual(mode('b'), 'ultra');
+});
+
+test('Codex keeps state in PLUGIN_DATA and skips the Claude statusline', () => {
+  const { dir } = sandbox();
+  const data = path.join(dir, 'codex-data');
+  const env = { CLAUDE_CONFIG_DIR: dir, PLUGIN_DATA: data };
+  const out = JSON.parse(runner('gen-z-activate.js', { session_id: 'c', source: 'startup' }, env, ['codex']).stdout);
+  assert.strictEqual(out.systemMessage, undefined);
+  assert.match(out.hookSpecificOutput.additionalContext, /\*\*full\*\* intensity/);
+
+  runner('gen-z-mode-tracker.js', { session_id: 'c', prompt: '$bro lite' }, env, ['codex']);
+  assert.strictEqual(fs.readFileSync(path.join(data, 'sessions', 'c'), 'utf8'), 'lite');
+  assert.deepStrictEqual(fs.readdirSync(dir).sort(), ['codex-data']);
+});
+
+test('Copilot gets top-level additionalContext and its first prompt can set the mode', () => {
+  const { dir } = sandbox();
+  const data = path.join(dir, 'copilot-data');
+  const input = { session_id: 'p', source: 'new', initial_prompt: 'gen z mode ultra' };
+  const res = runner('gen-z-activate.js', input, { CLAUDE_CONFIG_DIR: dir, COPILOT_PLUGIN_DATA: data }, ['copilot']);
+  const out = JSON.parse(res.stdout);
+  assert.match(out.additionalContext, /\*\*ultra\*\* intensity/);
+  assert.strictEqual(fs.readFileSync(path.join(data, 'sessions', 'p'), 'utf8'), 'ultra');
+});
