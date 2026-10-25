@@ -10,7 +10,7 @@
 - Colored statusline badge that follows the current session, installed at a stable path that survives plugin updates. The setup tip shows once, to you, not the model.
 - `hooks/install.sh` now patches `settings.json` itself (idempotent, with a `.bak`), and `uninstall.sh` reverses it. The old snippet used a hook format Claude Code no longer accepts.
 - Gemini CLI imports the skill directly via `GEMINI.md`.
-- Plugin icon, `npm test` suite, CI, and `npm run sync` to keep all nine manifests and the Codex copy of the skill on one version.
+- Plugin icon, `bun test` suite, CI, and `bun run sync` to keep all nine manifests and the Codex copy of the skill on one version.
 
 ## 0.1.0
 

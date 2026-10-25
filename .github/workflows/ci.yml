@@ -10,12 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      # the hooks themselves run on node in Claude Code, and the tests spawn them with it
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - name: Manifests and Codex copy in sync
-        run: node scripts/sync.js --check
+        run: bun run check
       - name: Hook tests
-        run: node --test test/hooks.test.js
+        run: bun test
       - name: Shell syntax
         run: bash -n hooks/*.sh

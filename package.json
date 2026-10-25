@@ -5,11 +5,8 @@
   "description": "Gen Z communication mode: slang-heavy, high-energy responses that stay technically accurate.",
   "license": "MIT",
   "scripts": {
-    "sync": "node scripts/sync.js",
-    "check": "node scripts/sync.js --check",
-    "test": "node scripts/sync.js --check && node --test test/hooks.test.js"
-  },
-  "engines": {
-    "node": ">=18"
+    "sync": "bun scripts/sync.js",
+    "check": "bun scripts/sync.js --check",
+    "test": "bun scripts/sync.js --check && bun test"
   }
 }

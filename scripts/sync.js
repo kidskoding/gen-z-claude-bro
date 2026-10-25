@@ -57,7 +57,7 @@ write('plugins/gen-z-claude-bro/skills/bro/SKILL.md', fs.readFileSync(path.join(
 if (drifted.length === 0) {
   console.log(`✓ everything in sync at v${version}`);
 } else if (check) {
-  console.error(`✗ out of sync with v${version} (run \`npm run sync\`):\n  ${drifted.join('\n  ')}`);
+  console.error(`✗ out of sync with v${version} (run \`bun run sync\`):\n  ${drifted.join('\n  ')}`);
   process.exit(1);
 } else {
   console.log(`✓ synced to v${version}:\n  ${drifted.join('\n  ')}`);

@@ -306,11 +306,11 @@ Mode state lives in `~/.claude/gen-z-claude-bro/sessions/<session id>` and is cl
 Edit behavior in `skills/bro/SKILL.md` only, then:
 
 ```
-npm run sync   # copies the skill into the Codex plugin and stamps package.json's version on every manifest
-npm test       # sync check + hook tests
+bun run sync   # copies the skill into the Codex plugin and stamps package.json's version on every manifest
+bun run test   # sync check + hook tests
 ```
 
-To release, bump `version` in `package.json`, run `npm run sync`, and add a `CHANGELOG.md` entry.
+To release, bump `version` in `package.json`, run `bun run sync`, and add a `CHANGELOG.md` entry.
 
 ## License
 
