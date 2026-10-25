@@ -1,52 +1,54 @@
 #!/usr/bin/env node
-// UserPromptSubmit hook — tracks session-local mode changes and "stop gen z"
+// UserPromptSubmit hook — tracks session-local mode changes and "stop gen z".
+// Runs under Bun or Node. Must never throw or exit non-zero.
 
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const readline = require('readline');
 
 const FLAG_FILE = path.join(os.homedir(), '.claude', '.gen-z-active');
 
-const MODE_MAP = {
-  '/bro lite': 'lite',
-  '/bro full': 'full',
-  '/bro ultra': 'ultra',
-  '/bro': 'full',
-  // namespaced form when installed as plugin
-  '/gen-z-claude-bro:bro lite': 'lite',
-  '/gen-z-claude-bro:bro full': 'full',
-  '/gen-z-claude-bro:bro ultra': 'ultra',
-  '/gen-z-claude-bro:bro': 'full',
-};
-
+const COMMANDS = ['/bro', '/gen-z-claude-bro:bro'];
+const LEVELS = ['lite', 'full', 'ultra'];
 const STOP_PHRASES = ['stop gen z', 'normal mode'];
 
-const rl = readline.createInterface({ input: process.stdin });
-let data = '';
+// Returns 'lite' | 'full' | 'ultra' | 'off' | null (no change)
+function detectMode(rawPrompt) {
+  const prompt = String(rawPrompt || '').trim().toLowerCase();
+  const phrase = prompt.replace(/[.!?\s]+$/, '');
 
-rl.on('line', line => { data += line; });
-rl.on('close', () => {
+  if (STOP_PHRASES.includes(phrase)) return 'off';
+
+  const [cmd, arg] = prompt.split(/\s+/);
+  if (!COMMANDS.includes(cmd)) return null;
+  return LEVELS.includes(arg) ? arg : 'full';
+}
+
+function applyMode(mode) {
   try {
-    const input = JSON.parse(data);
-    const prompt = (input.prompt || '').trim().toLowerCase();
-
-    if (STOP_PHRASES.some(p => prompt === p)) {
-      try { fs.unlinkSync(FLAG_FILE); } catch (_) {}
-      return;
-    }
-
-    const modeEntries = Object.entries(MODE_MAP).sort((a, b) => b[0].length - a[0].length);
-    for (const [cmd, mode] of modeEntries) {
-      if (prompt === cmd || prompt.startsWith(cmd + ' ')) {
-        try {
-          fs.mkdirSync(path.dirname(FLAG_FILE), { recursive: true });
-          fs.writeFileSync(FLAG_FILE, mode, 'utf8');
-        } catch (_) {}
-        return;
-      }
+    if (mode === 'off') {
+      fs.rmSync(FLAG_FILE, { force: true });
+    } else if (mode) {
+      fs.mkdirSync(path.dirname(FLAG_FILE), { recursive: true });
+      fs.writeFileSync(FLAG_FILE, mode, 'utf8');
     }
   } catch (_) {
     // silent fail
   }
-});
+}
+
+if (require.main === module) {
+  let data = '';
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('data', chunk => { data += chunk; });
+  process.stdin.on('end', () => {
+    try {
+      applyMode(detectMode(JSON.parse(data).prompt));
+    } catch (_) {
+      // silent fail
+    }
+  });
+  process.stdin.on('error', () => {});
+}
+
+module.exports = { detectMode };

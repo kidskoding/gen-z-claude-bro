@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// SessionStart hook — injects Gen Z mode rules and writes flag file
+// SessionStart hook — injects Gen Z mode rules and writes flag file.
+// Runs under Bun or Node. Must never throw or exit non-zero.
 
 const fs = require('fs');
 const os = require('os');
@@ -21,10 +22,15 @@ try {
   const raw = fs.readFileSync(SETTINGS_FILE, 'utf8');
   const settings = JSON.parse(raw);
   if (!settings.statusLine) {
-    const statuslineCmd = `bash "${path.join(__dirname, 'gen-z-statusline.sh')}"`;
+    const snippet = JSON.stringify({
+      statusLine: {
+        type: 'command',
+        command: `bash "${path.join(__dirname, 'gen-z-statusline.sh')}"`,
+      },
+    });
     process.stdout.write(
       `\n> **Gen Z Mode statusline not configured.** ` +
-      `Add to ~/.claude/settings.json: \`"statusLine": {"type": "command", "command": "${statuslineCmd}"}\`\n`
+      `Add to ~/.claude/settings.json: \`${snippet.slice(1, -1)}\`\n`
     );
   }
 } catch (_) {
@@ -32,18 +38,17 @@ try {
 }
 
 // Emit skill rules as system context
-// Try ~/.claude/skills/bro/SKILL.md (installed location), fall back to sibling skills/ dir
+// Prefer the skill shipped next to this hook (plugin install or install.sh copy),
+// then fall back to a standalone ~/.claude/skills install (e.g. via `bunx skills add`)
 const candidatePaths = [
-  path.join(os.homedir(), '.claude', 'skills', 'bro', 'SKILL.md'),
-  path.join(os.homedir(), '.claude', 'skills', 'gen-z', 'SKILL.md'),
   path.join(__dirname, '..', 'skills', 'bro', 'SKILL.md'),
-  path.join(__dirname, '..', 'skills', 'gen-z', 'SKILL.md'),
+  path.join(os.homedir(), '.claude', 'skills', 'bro', 'SKILL.md'),
 ];
 for (const skillPath of candidatePaths) {
   try {
     const skill = fs.readFileSync(skillPath, 'utf8');
     // Strip YAML frontmatter before injecting
-    const body = skill.replace(/^---[\s\S]*?---\n/, '');
+    const body = skill.replace(/^\uFEFF?---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
     process.stdout.write(body);
     break;
   } catch (_) {

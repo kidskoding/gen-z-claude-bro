@@ -1,0 +1,29 @@
+{
+  "name": "gen-z-claude-bro",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Gen Z communication mode: slang-heavy, high-energy responses that stay technically accurate.",
+  "license": "MIT",
+  "author": "kidskoding (https://github.com/kidskoding)",
+  "homepage": "https://github.com/kidskoding/gen-z-claude-bro",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kidskoding/gen-z-claude-bro.git"
+  },
+  "packageManager": "bun@1.4.4",
+  "engines": {
+    "bun": ">=1.1.0"
+  },
+  "scripts": {
+    "sync": "bun scripts/sync.ts",
+    "validate": "bun scripts/validate.ts",
+    "typecheck": "tsc",
+    "test": "bun test",
+    "check": "bun run validate && bun run typecheck && bun test",
+    "skills:list": "bunx skills add . --list"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.4",
+    "typescript": "^7.0.2"
+  }
+}

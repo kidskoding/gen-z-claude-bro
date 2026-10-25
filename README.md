@@ -2,6 +2,13 @@
 
 **your AI coding assistant but make it gen z**
 
+[![CI](https://github.com/kidskoding/gen-z-claude-bro/actions/workflows/ci.yml/badge.svg)](https://github.com/kidskoding/gen-z-claude-bro/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+```bash
+bunx skills add kidskoding/gen-z-claude-bro
+```
+
 Makes Claude speak like a Gen Z person — slang-heavy, high energy, still technically accurate no cap. Works with Claude Code, Cursor, Copilot, Windsurf, Cline, and any agent that supports system prompts.
 
 ---
@@ -67,6 +74,20 @@ Makes Claude speak like a Gen Z person — slang-heavy, high energy, still techn
 
 Installation differs by harness. If you use more than one agent, install this plugin separately in each one.
 
+### Any agent — skills CLI ([skills.sh](https://skills.sh))
+
+The fastest install. The [skills CLI](https://github.com/vercel-labs/skills) finds `skills/bro/SKILL.md` and installs it into Claude Code, Codex, Cursor, OpenCode, and any other agent it supports:
+
+```bash
+bunx skills add kidskoding/gen-z-claude-bro            # this project
+bunx skills add kidskoding/gen-z-claude-bro -g         # every project
+bunx skills add kidskoding/gen-z-claude-bro -a claude-code -g -y   # one agent, no prompts
+```
+
+Prefer npm? `npx skills add kidskoding/gen-z-claude-bro` does the same thing. Update with `bunx skills update bro` and remove with `bunx skills remove bro`.
+
+This installs the skill only. To get the `[GEN-Z]` statusline badge and `/bro` intensity tracking in Claude Code, use the Claude Code plugin below.
+
 ### Codex CLI
 
 This repo includes a Codex marketplace catalog at `.agents/plugins/marketplace.json`.
@@ -122,7 +143,15 @@ In Claude Code, run:
 /plugin install gen-z-claude-bro@gen-z-claude-bro
 ```
 
-Restart Claude Code. Then:
+Restart Claude Code. The plugin wires its `SessionStart` and `UserPromptSubmit` hooks automatically, so Gen Z mode is on from the first message. The hooks run on Bun when it's installed and fall back to Node.
+
+For the statusline badge, add this to `~/.claude/settings.json`. The plugin prints the exact path on your first session if it's missing.
+
+```json
+"statusLine": {"type": "command", "command": "bash /path/to/gen-z-claude-bro/hooks/gen-z-statusline.sh"}
+```
+
+Then:
 
 | What you type | What happens |
 |---|---|
@@ -131,6 +160,15 @@ Restart Claude Code. Then:
 | `/gen-z-claude-bro:bro ultra` | Maximum chaos |
 | "stop gen z" / "normal mode" | Deactivate for the current session |
 
+
+### Claude Code — manual hooks (no plugin)
+
+```bash
+git clone https://github.com/kidskoding/gen-z-claude-bro.git
+bash gen-z-claude-bro/hooks/install.sh
+```
+
+This copies the hooks and skill into `~/.claude/` and prints the `settings.json` snippet to paste. Run `hooks/uninstall.sh` to remove them.
 
 ---
 
@@ -241,3 +279,31 @@ Paste the contents of `skills/bro/SKILL.md` (skip the `---` frontmatter block at
 Natural language also triggers Gen Z mode — no slash command needed:
 
 > "talk like a student" / "bro mode" / "speak casual" / "use slang" / "be my friend"
+
+---
+
+## Development
+
+This repo uses [Bun](https://bun.sh) for its tooling. You don't need it at runtime: the hooks run on Bun or Node.
+
+```bash
+bun install          # dev deps (TypeScript types)
+bun run check        # validate manifests + typecheck + tests
+bun test             # hook, statusline and installer tests
+bun run skills:list  # preview what the skills CLI will install from this checkout
+```
+
+`skills/bro/SKILL.md` is the single source of truth for behavior, and `package.json` is the single source of truth for the version. To cut a release:
+
+```bash
+# 1. bump "version" in package.json
+bun run sync         # push the version into every plugin manifest + mirror SKILL.md
+bun run check
+git commit -am "release: vX.Y.Z" && git tag vX.Y.Z && git push --follow-tags
+```
+
+CI runs `bun run check` on Ubuntu and macOS for every push and PR.
+
+## License
+
+[MIT](LICENSE)

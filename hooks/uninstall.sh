@@ -7,7 +7,7 @@ HOOKS_DIR="$HOME/.claude/hooks"
 SKILLS_DIR="$HOME/.claude/skills/bro"
 FLAG="$HOME/.claude/.gen-z-active"
 
-for f in gen-z-activate.js gen-z-mode-tracker.js gen-z-statusline.sh; do
+for f in gen-z-activate.js gen-z-mode-tracker.js gen-z-statusline.sh gen-z-run.sh; do
   [ -f "$HOOKS_DIR/$f" ] && rm "$HOOKS_DIR/$f" && echo "✓ removed $f"
 done
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Installs gen-z hooks into ~/.claude/hooks/ and patches ~/.claude/settings.json
+# Installs gen-z hooks into ~/.claude/hooks/ and prints the settings.json snippet to add.
+# Only needed for manual installs — the Claude Code plugin wires hooks automatically.
 
 set -euo pipefail
 
@@ -14,6 +15,8 @@ mkdir -p "$HOOKS_DIR" "$SKILLS_DIR"
 cp "$SCRIPT_DIR/gen-z-activate.js" "$HOOKS_DIR/"
 cp "$SCRIPT_DIR/gen-z-mode-tracker.js" "$HOOKS_DIR/"
 cp "$SCRIPT_DIR/gen-z-statusline.sh" "$HOOKS_DIR/"
+cp "$SCRIPT_DIR/run.sh" "$HOOKS_DIR/gen-z-run.sh"
+chmod +x "$HOOKS_DIR/gen-z-run.sh"
 chmod +x "$HOOKS_DIR/gen-z-activate.js"
 chmod +x "$HOOKS_DIR/gen-z-mode-tracker.js"
 chmod +x "$HOOKS_DIR/gen-z-statusline.sh"
@@ -29,10 +32,10 @@ echo ""
 cat <<'EOF'
   "hooks": {
     "SessionStart": [
-      {"command": "node ~/.claude/hooks/gen-z-activate.js"}
+      {"hooks": [{"type": "command", "command": "bash ~/.claude/hooks/gen-z-run.sh ~/.claude/hooks/gen-z-activate.js"}]}
     ],
     "UserPromptSubmit": [
-      {"command": "node ~/.claude/hooks/gen-z-mode-tracker.js"}
+      {"hooks": [{"type": "command", "command": "bash ~/.claude/hooks/gen-z-run.sh ~/.claude/hooks/gen-z-mode-tracker.js"}]}
     ]
   },
   "statusLine": {
